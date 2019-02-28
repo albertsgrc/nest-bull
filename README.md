@@ -6,7 +6,7 @@
 [travis-url]: https://travis-ci.org/nestjs/nest
 [linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
 [linux-url]: https://travis-ci.org/nestjs/nest
-  
+
   <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
     <p align="center">
 <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/typeorm.svg" alt="NPM Version" /></a>
@@ -29,32 +29,31 @@ This is a [Bull](https://github.com/OptimalBits/bull) module for [Nest](https://
 ## Installation
 
 ```bash
-$ npm i --save nest-bull bull
+$ npm i --save nestjsx-bull bull
 $ npm i --save-dev @types/bull
 ```
 
 ## Quick Start
 
 ```ts
-import {Body, Controller, Get, Module, Param, Post} from '@nestjs/common';
-import {DoneCallback, Job, Queue} from 'bull';
-import {BullModule, InjectQueue} from 'nest-bull';
+import { Body, Controller, Get, Module, Param, Post } from "@nestjs/common";
+import { DoneCallback, Job, Queue } from "bull";
+import { BullModule, InjectQueue } from "nest-bull";
 
+// BullModule is global, so it can be used anywhere,
+// not just under ApplicationModule
 @Controller()
 export class AppController {
-
-  constructor(
-    @InjectQueue('store') readonly queue: Queue,
-  ) {}
+  constructor(@InjectQueue("store") readonly queue: Queue) {}
 
   @Post()
-  async addJob( @Body() value: any ) {
+  async addJob(@Body() value: any) {
     const job: Job = await this.queue.add(value);
     return job.id;
   }
 
-  @Get(':id')
-  async getJob( @Param('id') id: string ) {
+  @Get(":id")
+  async getJob(@Param("id") id: string) {
     return await this.queue.getJob(id);
   }
 }
@@ -62,25 +61,27 @@ export class AppController {
 @Module({
   imports: [
     BullModule.forRoot({
-      name: 'store',
-      options: {
-        redis: {
-          port: 6379,
-        },
-      },
-      processors: [
-        (job: Job, done: DoneCallback) => { done(null, job.data); },
-      ],
-    }),
+        queues: [
+            name: "store",
+            options: {
+                redis: {
+                port: 6379
+                }
+            },
+            processors: [
+                (job: Job, done: DoneCallback) => {
+                    done(null, job.data);
+                }
+            ]
+        ]
+    })
   ],
-  controllers: [
-    AppController,
-  ],
+  controllers: [AppController]
 })
 export class ApplicationModule {}
 ```
 
 ## People
 
-- Author - [Frederic Woelffel](https://fwoelffel.me)
+- Original Author - [Frederic Woelffel](https://fwoelffel.me)
 - Website - [https://nestjs.com](https://nestjs.com/)

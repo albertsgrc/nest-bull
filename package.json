@@ -1,8 +1,8 @@
 {
-  "name": "nest-bull",
+  "name": "nestjsx-bull",
   "version": "0.3.1",
   "description": "Nest - modern, fast, powerful node.js web framework (@bull)",
-  "author": "Frederic Woelffel <hello@fwoelffel.me>",
+  "author": "Albert Segarra <albertsgrc@gmail.com>",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
